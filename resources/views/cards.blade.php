@@ -5,6 +5,7 @@
         </h2>
     </x-slot>
 
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -15,16 +16,15 @@
         </div>
     </div>
 
-    
 
         @role('administrator')
-        
+        <form action="/flower/filter" method="get">  
             <div class="container mb-3">
                 Data Display:
                 <div class="btn-group bg-white" role="group" aria-label="Basic Example">
-                    <a href="#" class="btn btn-outline-secondary active"
+                    <a href="/dashboard" class="btn btn-outline-secondary"
                     data-toggle="tooltip" data-placement="top" title="Display data in table"><i class="bi bi-table"></i></a>
-                    <a href="/flower/cards" class="btn btn-outline-secondary"
+                    <a href="#" class="btn btn-outline-secondary active"
                     data-toggle="tooltip" data-placement="top" title="Display data in card"><i class="bi bi-grid-3x3-gap"></i></a>
                 </div>
             </div>
@@ -32,8 +32,7 @@
         <div class="container mb-3">
             <div class="card">
                 <div class="card-body">
-                    
-                    <form action="/flower/filter" method="get">                       
+                   
                         <span>
                             <i class="bi bi-filter-square-fill"></i>
                               <b>Filter</b>
@@ -77,35 +76,36 @@
                     id="search" name="search" type="search" placeholder="Search" aria-label="Search">
                 </div>
             </div>
+                <input type="hidden" id="cardActive" name="cardActive" value="1">
             </form>
         
         
         <div class="container">
             {{ $flowers->appends($_GET)->links() }}
-            <table class="table table-striped border text-center bg-light">
-                <thead>
-                    <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Real Name</th>
-                    <th scope="col">Habitat</th>
-                    <th scope="col">Option</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($flowers as $flower)
-                        <tr>
-                            <td>{{$flower->id}}</td>
-                            <td>{{$flower->name}}</td>
-                            <td>{{$flower->real_name}}</td>
-                            <td>{{$flower->habitat}}</td>
-                            <td><a class="badge badge-success"  href="/flower/{{ $flower->id }}">View</a></td>
-                        </tr>
-                    @endforeach
-                    
-                </tbody>
-                </table>
-                {{ $flowers->appends($_GET)->links() }}
+            <div class="row p-3">
+                @foreach ($flowers as $flower)
+                        <div class="col-sm-6 mb-2">
+                            <div class="card">
+                                <img class="card-img-top" src="{{ asset('') }}" alt="Card image cap">
+                              <div class="card-body">
+                                <h5 class="card-title font-weight-bold">{{ $flower->name }}</h5>
+                                <p class="card-text">{{ $flower->real_name }}</p>
+                                <p class="card-text font-italic">{{ $flower->habitat }}</p>
+                                <a href="/flower/{{ $flower->id }}" class="btn btn-success">View Data</a>
+                              </div>
+                              <div class="card-footer text-muted d-flex justify-content-between">
+                                  <span>
+                                    Created at {{ $flower->created_at }}
+                                  </span>
+                                  <span>
+                                    ID {{ $flower->id }}
+                                  </span>
+                              </div>
+                            </div>
+                          </div>      
+                @endforeach
+            </div>
+            {{ $flowers->appends($_GET)->links() }}
         </div>
         @endrole
     

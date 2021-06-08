@@ -26,6 +26,8 @@ Route::get('/dashboard', function () {
     return view('dashboard',['flowers' => $flowers]);
 })->middleware(['auth'])->name('dashboard');
 
+
+Route::get('/flower/cards', [FlowerController::class, 'cardView']);
 Route::get('/flower/filter', [FlowerController::class, 'filter']);
 Route::get('/flower/create', [FlowerController::class, 'create']);
 Route::post('/flower', [FlowerController::class, 'store']);

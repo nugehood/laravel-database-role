@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Flower;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 
 class FlowerController extends Controller
 {
@@ -20,12 +21,27 @@ class FlowerController extends Controller
         //
     }
 
+    public function cardView(){
+        $flowers = DB::table('flowers')->paginate(25);
+    
+        return view('cards',['flowers' => $flowers]);
+    }
+
     public function filter(Request $request){
+
         $flowers = DB::table('flowers')
                     ->orderBy($request->selectdata, $request->order)
+                    ->where($request->searchIndex,'like', $request->search.'%')
                     ->paginate($request->rows);
-    
-        return view('dashboard',['flowers' => $flowers]);
+        if($request->cardActive == '1')
+        {
+            return view('cards',['flowers' => $flowers]);
+        }
+        else
+        {
+            return view('dashboard',['flowers' => $flowers]);
+        }
+        
     }
 
 
