@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            @role('administrator') {{ __('Dashboard') }} | Flower Data @endrole
+            @role(['superadministrator','administrator']) {{ __('Dashboard') }} | Flower Data @endrole
         </h2>
     </x-slot>
 
@@ -17,7 +17,7 @@
     </div>
 
 
-        @role('administrator')
+        @role(['superadministrator','administrator'])
         <form action="/flower/filter" method="get">  
             <div class="container mb-3">
                 Data Display:
@@ -26,6 +26,12 @@
                     data-toggle="tooltip" data-placement="top" title="Display data in table"><i class="bi bi-table"></i></a>
                     <a href="#" class="btn btn-outline-secondary active"
                     data-toggle="tooltip" data-placement="top" title="Display data in card"><i class="bi bi-grid-3x3-gap"></i></a>
+                </div>
+                <br>
+                    Export Data :
+                <div class="btn-group mt-3" role="group">
+                    <a href="/flower/print" class="btn btn-danger">PDF <i class="bi bi-file-earmark-pdf"></i></a>
+                    <a href="/flower/excel" class="btn btn-success">Excel <i class="bi bi-file-earmark-excel"></i></a>
                 </div>
             </div>
 
@@ -85,9 +91,15 @@
             <div class="row p-3">
                 @foreach ($flowers as $flower)
                         <div class="col-sm-6 mb-2">
-                            <div class="card">
-                                <img class="card-img-top" src="{{ asset('') }}" alt="Card image cap">
+                            <div class="card">                            
                               <div class="card-body">
+                                @if ($flower->img != null)
+                                    <img src="{{asset('/images/' . $flower->img) }}" 
+                                    class="float-right rounded border border-secondary" width="150px" alt="">
+                                @else
+                                  <img src="{{asset('/images/null.jpg') }}" 
+                                  class="float-right rounded border border-secondary" width="150px" alt="">
+                              @endif
                                 <h5 class="card-title font-weight-bold">{{ $flower->name }}</h5>
                                 <p class="card-text">{{ $flower->real_name }}</p>
                                 <p class="card-text font-italic">{{ $flower->habitat }}</p>

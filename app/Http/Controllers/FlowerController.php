@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use RealRashid\SweetAlert\Facades\Alert;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use App\Models\Flower;
+use Carbon\Carbon;
+use App\Exports\FlowersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -84,6 +88,20 @@ class FlowerController extends Controller
         return view('view', compact('flowers'));
     }
 
+    public function exportExcel()
+    {
+        $mytime = Carbon::now();
+        return Excel::download(new FlowersExport, 'flowers '. $mytime .'.xlsx');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $flowers = Flower::all();
+        $mytime = Carbon::now();
+        $pdf = PDF::loadView('print', ['flowers' =>$flowers], ['mytime' => $mytime]);
+        return $pdf->download('student '. $mytime .'.pdf');
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -93,6 +111,24 @@ class FlowerController extends Controller
     public function edit(Flower $flowers)
     {
         return view('edit', compact('flowers'));
+    }
+
+    public function change(Flower $flowers)
+    {
+        return view('change', compact('flowers'));     
+    }
+
+    public function upload(Flower $flowers, Request $request){
+        if($request->hasFile('img')){
+            $file = $request->file('img');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time().'.'. $extension;
+            $file->move('images', $filename);
+            $flowers->img = $filename;
+        }
+        $flowers->save();
+        Alert::success('Updated!', 'Picture successfully updated!');
+        return redirect('/flower/' . $flowers->id);
     }
 
     /**
@@ -118,7 +154,7 @@ class FlowerController extends Controller
                 ]);
 
                 Alert::success('Changed!', 'Data has been successfully changed!');
-                return redirect('dashboard');
+                return redirect('/flower/' . $flowers->id);
     }
 
     /**

@@ -4,7 +4,7 @@
             {{ __('Dashboard') }} | Create Flower Data
         </h2>
     </x-slot>
-    @role('administrator')
+    @role(['superadministrator','administrator'])
         <div class="container">
            
             <div class="row justify-content-center mt-5">
@@ -79,7 +79,7 @@
   </div>
 
                         <div class="d-flex justify-content-between p-3 border-top">
-                            <a href="/dashboard" class="btn btn-secondary"><i class="bi bi-arrow-bar-left"></i> Back</a>
+                            <a href="{{ url()->previous() }}" class="btn btn-secondary"><i class="bi bi-arrow-bar-left"></i> Back</a>
                             <button data-toggle="modal" data-target="#edit" type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Edit</button>
                         </div>
                         <div class="card-footer text-muted text-center">

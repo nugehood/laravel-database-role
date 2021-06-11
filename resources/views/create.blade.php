@@ -4,7 +4,7 @@
             {{ __('Dashboard') }} | Create Flower Data
         </h2>
     </x-slot>
-    @role('administrator')
+    @role(['superadministrator','administrator'])
         <div class="container">
            
             <div class="row justify-content-center mt-5">
@@ -57,7 +57,7 @@
                         </div>
                     </form>
                         <div class="card-footer text-muted text-center">
-                       Created at
+                       Create new data
                       </div>
                   </div>
                 </div>
