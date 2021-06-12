@@ -43,8 +43,17 @@ Route::put('/flower/{flowers}', [FlowerController::class, 'update'])->middleware
 Route::delete('/flower/{flowers}', [FlowerController::class, 'destroy'])->middleware(['auth']);
 
 //User Routes
+Route::get('/user/print', [UserController::class, 'exportPdf'])->middleware(['auth']);
+Route::get('/user/excel', [UserController::class, 'exportExcel'])->middleware(['auth']);
+Route::get('/user/cards', [UserController::class, 'cardView'])->middleware(['auth']);
+Route::get('/user/filter', [UserController::class, 'filter'])->middleware(['auth']);
 Route::get('/user/create', [UserController::class, 'create'])
 ->middleware(['auth','permission:users-create']);
+Route::get('/user/dashboard', [UserController::class, 'index'])->middleware(['auth']);
+Route::get('/user/{users}', [UserController::class, 'show'])->middleware(['auth']);
+Route::get('/user/{users}/edit', [UserController::class, 'edit'])->middleware(['auth']);
 Route::post('/user', [UserController::class, 'store'])->middleware(['auth']);
+Route::put('/user/{users}', [UserController::class, 'update'])->middleware(['auth']);
+Route::delete('/user/{users}', [UserController::class, 'destroy'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

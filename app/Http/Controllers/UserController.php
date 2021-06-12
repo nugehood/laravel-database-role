@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Exports\UsersExport;
 
 use RealRashid\SweetAlert\Facades\Alert;
-use PDF;
+use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -27,7 +30,45 @@ class UserController extends Controller
     {
         $users = DB::table('users')->paginate(25);
     
-        return view('user.index',['users' => $users]);
+        return view('user.dashboard',['users' => $users]);
+    }
+
+    public function cardView()
+    {
+        $users = DB::table('users')->paginate(25);
+
+        return view('user.cards',['users' => $users]);
+    }
+
+
+    public function exportExcel()
+    {
+        $mytime = Carbon::now();
+        return Excel::download(new UsersExport, 'users '. $mytime .'.xlsx');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $users = User::all();
+        $mytime = Carbon::now();
+        $pdf = PDF::loadView('user.print', ['users' =>$users], ['mytime' => $mytime]);
+        return $pdf->download('users '. $mytime .'.pdf');
+    }
+
+    public function filter(Request $request)
+    {
+        $users = DB::table('users')
+                    ->orderBy($request->selectdata, $request->order)
+                    ->where($request->searchIndex,'like', $request->search.'%')
+                    ->paginate($request->rows);
+        if($request->cardActive == '1')
+        {
+            return view('user.cards',['users' => $users]);
+        }
+        else
+        {
+            return view('user.dashboard',['users' => $users]);
+        }
     }
 
 
@@ -77,9 +118,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $users)
     {
-        //
+        return view('user.view', compact('users'));
     }
 
     /**
@@ -88,9 +129,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $users)
     {
-        //
+        return view('user.edit', compact('users'));
     }
 
     /**
@@ -100,9 +141,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $users)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+
+        User::where('id', $users->id)
+            ->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+
+            Alert::success('Changed!', 'Data has been successfully changed!');
+            return redirect('/user/' . $users->id);
+
     }
 
     /**
@@ -111,8 +165,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $users)
     {
-        //
+        User::destroy($users->id);
+        Alert::success('Deleted!', 'The data has been deleted!');
+        return redirect('/user/dashboard');
     }
 }

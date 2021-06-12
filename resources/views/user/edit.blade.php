@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }} | Edit Flower Data
+            {{ __('Dashboard') }} | Edit User Data
         </h2>
     </x-slot>
     @role(['superadministrator','administrator'])
@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <div class="card-body p-3 mb-5 text-justify">
-                        <form action="/flower/{{ $flowers->id }}" method="POST" enctype="multipart/form-data">
+                        <form action="/user/{{ $users->id }}" method="POST" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                         <div class="row mb-3">
@@ -24,34 +24,24 @@
                             <label for="name" class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
-                                value="{{ $flowers->name }}">
+                                value="{{ $users->name }}">
                                     @error('name')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
                               </div>
                             </div>
                             <div class="row mb-3">
-                              <label for="real_name" class="col-sm-2 col-form-label">Real Name</label>
+                              <label for="email" class="col-sm-2 col-form-label">Email</label>
                               <div class="col-sm-10">
                                 <input type="text" 
-                                class="form-control @error('real_name') is-invalid @enderror" 
-                                id="real_name" name="real_name"
-                                value="{{ $flowers->real_name }}">
-                                @error('real_name')
+                                class="form-control @error('email') is-invalid @enderror" 
+                                id="email" name="email"
+                                value="{{ $users->email }}">
+                                @error('email')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                  @enderror
                               </div>
-                            </div>
-                            <div class="row mb-3">
-                              <label for="habitat" class="col-sm-2 col-form-label">Habitat</label>
-                              <div class="col-sm-10">
-                                <input type="text" class="form-control @error('habitat') is-invalid @enderror" id="habitat" name="habitat"
-                                value="{{ $flowers->habitat }}">
-                                @error('habitat')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                 @enderror
-                              </div>
-                            </div>                           
+                            </div>                          
                         </div>
 
   <!--Edit Modal-->
@@ -83,7 +73,7 @@
                             <button data-toggle="modal" data-target="#edit" type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Edit</button>
                         </div>
                         <div class="card-footer text-muted text-center">
-                       Updated at {{ $flowers->updated_at }}
+                       Updated at {{ $users->updated_at }}
                       </div>
                   </div>
                 </div>

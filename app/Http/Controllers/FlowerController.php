@@ -99,7 +99,7 @@ class FlowerController extends Controller
         $flowers = Flower::all();
         $mytime = Carbon::now();
         $pdf = PDF::loadView('print', ['flowers' =>$flowers], ['mytime' => $mytime]);
-        return $pdf->download('student '. $mytime .'.pdf');
+        return $pdf->download('flowers '. $mytime .'.pdf');
     }
 
     /**

@@ -6,20 +6,9 @@
     </x-slot>
 
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    You're logged in as <b>{{ Auth::user()->name }}</b>!
-                </div>
-            </div>
-        </div>
-    </div>
-
-
         @role(['superadministrator','administrator'])
         <form action="/flower/filter" method="get">  
-            <div class="container mb-3">
+            <div class="container mb-3 mt-5">
                 Data Display:
                 <div class="btn-group bg-white" role="group" aria-label="Basic Example">
                     <a href="/dashboard" class="btn btn-outline-secondary"

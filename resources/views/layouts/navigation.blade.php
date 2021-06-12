@@ -41,7 +41,7 @@
                                 Role & Permission
                             </x-dropdown-link>
                             @endrole
-                            <x-dropdown-link href="/user/index">
+                            <x-dropdown-link href="/user/dashboard">
                                 User Data
                             </x-dropdown-link>
                             @ability('superadministrator, administrator', 'users-create')
